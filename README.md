@@ -9,8 +9,13 @@ Api Rest que describe funcionamiento de un hospital
 npm install
 npm start
 ```
+
+## Carga de Datos Inicial
+npx sequelize-cli db:seed:all
+
 ## Postman
 https://www.getpostman.com/collections/1ad75bb963cd2c120c9c
+
 
 ---
 ## Dependencias utilizadas en el proyecto
