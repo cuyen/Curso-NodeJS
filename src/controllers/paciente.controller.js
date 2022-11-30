@@ -1,23 +1,10 @@
+const { PacienteInexistente } = require('../const/errors');
 const model = require('../database/models/index');
 
-const _validar = function (paciente) {
-    return (paciente.direccion 
-                && paciente.apellido 
-                && paciente.nombre 
-                && paciente.dni);
-} 
-
-const _handleError = (res, err) => {
-    console.log(err);
-    res.status(500);
-    res.json({
-        mensaje: `Error Inesperado creando paciente ${err}`
-    })
-}
-
+const Joi = require('Joi')
 
 module.exports = {
-    listar: async (req, res) => {
+    listar: async (req, res, next) => {
         try {
             const pacientes = await model.paciente.findAll()
             res.json({
@@ -25,11 +12,11 @@ module.exports = {
             })
 
         } catch (err) {
-            _handleError(res, err);
+            return next(err);
         }
     },
 
-    listarInfo: async (req, res) => {
+    listarInfo: async (req, res, next) => {
         try {
             
             let { idPaciente } = req.params;
@@ -39,41 +26,28 @@ module.exports = {
                     id:idPaciente
                 }
             })
-            if (paciente != null) {
-                res.json({
-                    paciente: paciente
-                })
-            } else {
-                res.status(400)
-                res.json({
-                    error: `No se encontro el paciente con id: ${idPaciente} `
-                })
-            }
+
+            if (!paciente) return next(PacienteInexistente);
+            res.json({
+                paciente: paciente
+            })
 
         } catch (err) {
-            _handleError(res, err);
+            return next(err);
         }
 
     },
 
-    crear: async (req, res) => {
+    crear: async (req, res, next) => {
         try{
             let persona = req.body;
-            console.log(persona);
-            if (_validar(persona)){
-                const paciente = await model.paciente.create(persona);
-                res.json({
-                    paciente: paciente.id
-                })
-            } else {
-                res.status(400);
-                res.json({
-                    mensaje:'Error Validación: Campos requeridos [ direccion, apellido, nombre, dni]'
-                })
-            }
+            const paciente = await model.paciente.create(persona);
+            res.json({
+                paciente: paciente.id
+            })
            
         } catch (err) {
-            _handleError(res, err);
+            return next(err);
         }
         
     }

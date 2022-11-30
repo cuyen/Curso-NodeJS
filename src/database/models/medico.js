@@ -10,23 +10,57 @@ module.exports = (sequelize, DataTypes) => {
         },
         matricula:{
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate:{
+                notNull:true,
+                unique: true
+            }
         },
         nombre:{
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate:{
+                notEmpty:{
+                    args:true,
+                    msg:'El nombre es requerido'
+                },
+                isAlpha:true
+            }
         },
         apellido:{
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate:{
+                notEmpty:{
+                    args:true,
+                    msg:'El apellido es requerido'
+                },
+                isAlpha:true
+            }
         },
         especialidad:{
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate:{
+                notEmpty:{
+                    args:true,
+                    msg:'La especialidad es requerida'
+                },
+                notNull:true,
+                isAlpha: true                
+            }
         },
         dni:{
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            validate:{
+                notEmpty:{
+                    args:true,
+                    msg:'El dni es requerido'
+                },
+                notNull:true,
+                unique: true
+            }
         },
         createdAt:{
             type: DataTypes.DATE,

@@ -1,13 +1,5 @@
 const model = require('../database/models/index');
-
-const _handleError = (res, err) => {
-    console.log(err);
-    res.status(500);
-    res.json({
-        mensaje: `Error Inesperado ${err}`
-    })
-}
-
+const { TratamientoInexistente } = require('../const/errors');
 
 const _validar = function (tratamiento) {
     return (tratamiento.medicoId 
@@ -17,7 +9,7 @@ const _validar = function (tratamiento) {
 
 module.exports = {
 
-    listar: async (req, res) => {
+    listar: async (req, res, next) => {
         try {
 
             const tratamientos = await model.tratamiento.findAll()
@@ -27,11 +19,11 @@ module.exports = {
             })
 
         } catch (err) {
-            _handleError(res, err)
+            return next(error)
         }
     },
 
-    listarInfo: async (req, res) => {
+    listarInfo: async (req, res, next) => {
         try {
             let { idTratamiento } = req.params;
             const tratamiento = await model.tratamiento.findOne({
@@ -40,40 +32,31 @@ module.exports = {
                 }
             })
 
-            if (tratamiento != null) {
-                res.json({
-                    tratamiento: tratamiento
-                })
-            } else {
-                res.status(400)
-                res.json({
-                    error: `No se encontro el tratamiento con id: ${idTratamiento} `
-                })
+            if (!tratamiento) {
+                return next(TratamientoInexistente)
             }
 
+            res.json({
+                tratamiento: tratamiento
+            })
+
         } catch (err) {
-            _handleError(res, err)
+            return next(error)
         }
 
     },
 
-    crear: async (req, res) => {
+    crear: async (req, res, next) => {
         try {
             let trat = req.body;
-            if (_validar(trat)){
-                const tratamiento = await model.tratamiento.create(trat);
-                res.json({
-                    tratamiento: tratamiento.id
-                })
-            } else {
-                res.status(400);
-                res.json({
-                    mensaje:'Error Validación: Campos requeridos [ medicoId, pacienteId, descripcion, fechaAtencion]'
-                })
-            }
+            const tratamiento = await model.tratamiento.create(trat);
+            res.json({
+                tratamiento: tratamiento.id
+            })
+            
             
         } catch (err) {
-            _handleError(res, err)
+            return next(err)
         }
        
     }

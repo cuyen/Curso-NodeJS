@@ -10,19 +10,51 @@ module.exports = (sequelize, DataTypes) => {
         },
         nombre: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate:{
+                notEmpty:{
+                    args:true,
+                    msg:'El nombre es requerido'
+                },
+                isAlpha:true
+            },
+            
         },
         apellido: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate:{
+                notEmpty:{
+                    args:true,
+                    msg:'El apellido es requerido'
+                },
+                isAlpha:true
+            }
         },
         dni:{
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            validate:{
+                notEmpty:{
+                    args:true,
+                    msg:'El dni es requerido'
+                },
+                notNull:true,
+                unique: true
+            }
         },
         direccion: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate:{
+                notEmpty:{
+                    args:true,
+                    msg:'La dirección es requerida'
+                },
+                notNull:true,
+                unique: true,
+                isAlphanumeric:true
+            }
         },
 
         createdAt:{
