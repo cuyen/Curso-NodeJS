@@ -12,8 +12,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
             validate:{
-                notNull:true,
-                unique: true
+                notNull:true
             }
         },
         nombre:{
@@ -53,13 +52,13 @@ module.exports = (sequelize, DataTypes) => {
         dni:{
             type: DataTypes.INTEGER,
             allowNull: false,
+            unique: true,
             validate:{
                 notEmpty:{
                     args:true,
-                    msg:'El dni es requerido'
+                    msg:'El dni es requerido',
                 },
-                notNull:true,
-                unique: true
+                notNull:true
             }
         },
         createdAt:{
@@ -86,7 +85,8 @@ module.exports = (sequelize, DataTypes) => {
     })
 
     Medico.associate = models => {
-        Medico.belongsToMany(models.paciente, { through: models.tratamiento })
+        Medico.hasMany(models.tratamiento)
+        
     }
     return Medico
 }

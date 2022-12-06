@@ -12,7 +12,8 @@ const configuracionApi = (app) => {
 
 const configuracionRouter = (app) => {
     app.use('/api/', routerConfig.rutas_init())
-
+    app.use('/', routerConfig.rutas_auth())
+   
     app.use(function(req, res, next){
         next(createError(404))
     })

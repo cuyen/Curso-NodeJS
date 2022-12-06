@@ -34,13 +34,13 @@ module.exports = (sequelize, DataTypes) => {
         dni:{
             type: DataTypes.INTEGER,
             allowNull: false,
+            unique: true,
             validate:{
                 notEmpty:{
                     args:true,
                     msg:'El dni es requerido'
                 },
-                notNull:true,
-                unique: true
+                notNull:true
             }
         },
         direccion: {
@@ -81,7 +81,7 @@ module.exports = (sequelize, DataTypes) => {
     })
         
     Paciente.associate = models => {
-        Paciente.belongsToMany(models.medico, { through: models.tratamiento })
+        Paciente.hasMany(models.tratamiento)
     }
    
     return Paciente

@@ -19,7 +19,7 @@ module.exports = {
         nombre: 'Juan',
         apellido:'Perez',
         especialidad:'Pediatra',
-        dni:'28956478',
+        dni:'28956479',
         created_at: new Date(),
         updated_at: new Date()
       },
@@ -28,7 +28,7 @@ module.exports = {
         nombre: 'Alberto',
         apellido:'Consetoni',
         especialidad:'Cirujano',
-        dni:'29956478',
+        dni:'29956480',
         created_at: new Date(),
         updated_at: new Date()
 
